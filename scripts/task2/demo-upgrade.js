@@ -9,10 +9,10 @@ async function main() {
     const proxy = await upgrades.deployProxy(LogicV1, [], { initializer: "initialize", kind: "uups" });
     await proxy.waitForDeployment();
     const proxyAddress = await proxy.getAddress();
-    console.log(`✓ Proxy deployed at: ${proxyAddress}`);
+    console.log(`✅ Proxy deployed at: ${proxyAddress}`);
     
     const implV1 = await upgrades.erc1967.getImplementationAddress(proxyAddress);
-    console.log(`✓ Implementation V1 at: ${implV1}`);
+    console.log(`✅ Implementation V1 at: ${implV1}`);
 
     // STEP 2: Use V1 functions
     console.log("\nSTEP 2: Interact with LogicV1");
@@ -30,23 +30,23 @@ async function main() {
     // STEP 3: Deploy V2
     console.log("\nSTEP 3: Deploy LogicV2 implementation");
     const LogicV2 = await ethers.getContractFactory("contracts/task2/LogicV2.sol:LogicV2");
-    console.log(`✓ LogicV2 bytecode deployed`);
+    console.log(`✅ LogicV2 bytecode deployed`);
 
     // STEP 4: Upgrade to V2
     console.log("\nSTEP 4: Upgrade proxy from V1 to V2");
     console.log(`State before upgrade (counter = ${await proxy.getCounter()})`);
     
     const upgraded = await upgrades.upgradeProxy(proxyAddress, LogicV2);
-    console.log(`✓ Upgrade transaction submitted`);
+    console.log(`✅ Upgrade transaction submitted`);
     
     const implV2 = await upgrades.erc1967.getImplementationAddress(proxyAddress);
-    console.log(`✓ New implementation V2 at: ${implV2}`);
+    console.log(`✅ New implementation V2 at: ${implV2}`);
 
     // STEP 5: Verify state preservation
     console.log("\nSTEP 5: Verify state preservation");
     const counterAfterUpgrade = await upgraded.getCounter();
     console.log(`Counter after upgrade: ${counterAfterUpgrade}`);
-    console.log(`✓ State preserved! (was 3, still ${counterAfterUpgrade})`);
+    console.log(`✅ State preserved! (was 3, still ${counterAfterUpgrade})`);
 
     // STEP 6: Test new V2 functions
     console.log("\nSTEP 6: Test new V2 functionality");
